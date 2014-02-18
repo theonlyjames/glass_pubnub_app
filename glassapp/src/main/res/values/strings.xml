@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">GlassGDK</string>
+    <string name="channel">control_channel</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 

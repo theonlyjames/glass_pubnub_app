@@ -15,14 +15,15 @@ import com.pubnub.api.PubnubError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Hashtable;
+
 
 public class HomeActivity extends Activity {
     public static String TAG = "VL-VoiceLayerGlass";
 
-    Pubnub pubnub = new Pubnub("pub-c-ffcc3163-7fa4-419e-b464-52fcefdd15d9",
-         "sub-c-b2d0c1d8-952b-11e3-8d39-02ee2ddab7fe",
-         "",
-         false);
+    Pubnub pubnub = new Pubnub("pub-c-ffcc3163-7fa4-419e-b464-52fcefdd15d9", "sub-c-b2d0c1d8-952b-11e3-8d39-02ee2ddab7fe", "", false);
+
+    public String channel = "control_channel";
 
     private GestureDetector mGestureDetector;
 
@@ -34,9 +35,13 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.activity_home);
 
         mGestureDetector = createGestureDetector(this);
+
+        Hashtable args = new Hashtable(1);
+
+        args.put("control_channel", channel);
  
         try {
-          pubnub.subscribe("control_channel", new Callback() {
+          pubnub.subscribe(args, new Callback() {
 
               @Override
               public void connectCallback(String channel, Object message) {
