@@ -3,13 +3,16 @@ package com.lgsvl.example.glassapp;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
+import android.widget.EditText;
 
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
@@ -155,6 +158,143 @@ public class HomeActivity extends Activity {
 
     }
 
+    private void _publish(final String channel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Publish");
+        builder.setMessage("Enter message");
+        final EditText etMessage = new EditText(this);
+        builder.setView(etMessage);
+        builder.setPositiveButton("Publish",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Hashtable args = new Hashtable(2);
+
+                        String message = etMessage.getText().toString();
+
+                        if (args.get("message") == null) {
+                            try {
+                                Integer i = Integer.parseInt(message);
+                                args.put("message", i);
+                            } catch (Exception e) {
+
+                            }
+                        }
+                        if (args.get("message") == null) {
+                            try {
+                                Double d = Double.parseDouble(message);
+                                args.put("message", d);
+                            } catch (Exception e) {
+
+                            }
+                        }
+                        if (args.get("message") == null) {
+                            try {
+                                JSONArray js = new JSONArray(message);
+                                args.put("message", js);
+                            } catch (Exception e) {
+
+                            }
+                        }
+                        if (args.get("message") == null) {
+                            try {
+                                JSONObject js = new JSONObject(message);
+                                args.put("message", js);
+                            } catch (Exception e) {
+
+                            }
+                        }
+                        if (args.get("message") == null) {
+                            args.put("message", message);
+                        }
+
+                        // Publish Message
+
+                        args.put("channel", channel); // Channel Name
+
+                        pubnub.publish(args, new Callback() {
+                            @Override
+                            public void successCallback(String channel,
+                                                        Object message) {
+                                notifyUser("PUBLISH : " + message);
+                            }
+                            @Override
+                            public void errorCallback(String channel,
+                                                      PubnubError error) {
+                                notifyUser("PUBLISH : " + error);
+                            }
+                        });
+                    }
+
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    private void publish() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Publish ");
+        builder.setMessage("Enter channel name");
+        final EditText etChannel = new EditText(this);
+        builder.setView(etChannel);
+        builder.setPositiveButton("Done",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        _publish(etChannel.getText().toString());
+                    }
+
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void presence() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Presence");
+        builder.setMessage("Enter channel name");
+        final EditText input = new EditText(this);
+        builder.setView(input);
+        builder.setPositiveButton("Subscribe For Presence",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String channel = input.getText().toString();
+
+                        try {
+                            pubnub.presence(channel, new Callback() {
+                                @Override
+                                public void successCallback(String channel,
+                                                            Object message) {
+                                    notifyUser("PRESENCE : " + channel + " : "
+                                            + message.getClass() + " : "
+                                            + message.toString());
+                                }
+                                @Override
+                                public void errorCallback(String channel,
+                                                          PubnubError error) {
+                                    notifyUser("PRESENCE : ERROR on channel "
+                                            + channel + " : "
+                                            + error.toString());
+                                }
+                            });
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
     private GestureDetector createGestureDetector(Context context)
     {
         GestureDetector gestureDetector = new GestureDetector(context);
@@ -168,8 +308,8 @@ public class HomeActivity extends Activity {
             {
                 case TAP:
                         // compose JSON message
-                        String message = "{ \"message\" : \"" + message + "\" }";
-                        //final JSONObject obj = (JSONObject) message;
+                        String message = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
+                        //JSONObject obj = (JSONObject) message;
                         String channel = "control_channel";
                         try {
                             JSONObject jso = new JSONObject(message);
@@ -179,8 +319,8 @@ public class HomeActivity extends Activity {
                             // JAMES FROM PUB ORIG FILES
                             Hashtable args = new Hashtable(2);
 
-                            //args.put("message", jso);
-                            //args.put("message", message);
+                            args.put("message", jso);
+                            args.put("message", message);
 
                             pubnub.publish(channel, jso, new Callback() {
                                 @Override
