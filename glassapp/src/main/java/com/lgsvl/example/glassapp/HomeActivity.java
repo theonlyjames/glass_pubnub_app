@@ -54,7 +54,7 @@ public class HomeActivity extends Activity {
                 final String obj = (String) message;
                 this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(getApplicationContext(), obj,
+                        Toast.makeText(getApplicationContext(), obj.toString(),
                                 Toast.LENGTH_SHORT).show();
                         Log.i("Received msg : ", obj.toString());
                     }
