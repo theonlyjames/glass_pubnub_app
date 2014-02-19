@@ -44,7 +44,7 @@ public class HomeActivity extends Activity {
                 this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
 
                         Log.i("Received msg : ", String.valueOf(obj));
                     }
@@ -55,7 +55,7 @@ public class HomeActivity extends Activity {
                 this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(getApplicationContext(), obj,
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                         Log.i("Received msg : ", obj.toString());
                     }
                 });
@@ -65,7 +65,7 @@ public class HomeActivity extends Activity {
                 this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                         Log.i("Received msg : ", obj.toString());
                     }
                 });
