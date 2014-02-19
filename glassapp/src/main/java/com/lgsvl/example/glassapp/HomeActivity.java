@@ -103,6 +103,7 @@ public class HomeActivity extends Activity {
 
               @Override
               public void connectCallback(String channel, Object message) {
+                  notifyUser("PUBLISH : " + message);
                   Log.d("PUBNUB","SUBSCRIBE : CONNECT on channel:" + channel
                              + " : " + message.getClass() + " : "
                              + message.toString());
@@ -110,12 +111,14 @@ public class HomeActivity extends Activity {
 
               @Override
               public void disconnectCallback(String channel, Object message) {
+                  notifyUser("PUBLISH : " + message);
                   Log.d("PUBNUB","SUBSCRIBE : DISCONNECT on channel:" + channel
                              + " : " + message.getClass() + " : "
                              + message.toString());
               }
 
               public void reconnectCallback(String channel, Object message) {
+                  notifyUser("PUBLISH : " + message);
                   Log.d("PUBNUB","SUBSCRIBE : RECONNECT on channel:" + channel
                              + " : " + message.getClass() + " : "
                              + message.toString());
@@ -127,10 +130,12 @@ public class HomeActivity extends Activity {
                       if (message instanceof JSONObject) {
                           JSONObject jso = (JSONObject)message;
                               //final String message = jso.getString("message");
+                              notifyUser("PUBLISH : " + jso);
                               Log.e(TAG, "Got message " + message);
 
                       }
                   } catch (Exception e) {
+                      notifyUser("PUBLISH : " + e.toString());
                       Log.e(TAG, "exception in notifyMessage " + e.toString());
                   }
 
@@ -138,6 +143,7 @@ public class HomeActivity extends Activity {
 
               @Override
               public void errorCallback(String channel, PubnubError error) {
+                  notifyUser("PUBLISH : " + error);
                   Log.d("PUBNUB","SUBSCRIBE : ERROR on channel " + channel
                              + " : " + error.toString());
               }
@@ -163,18 +169,19 @@ public class HomeActivity extends Activity {
                 case TAP:
                         // compose JSON message
                         String message = "{ \"message\" : \"" + "my message" + "\" }";
+                        String channel = "control_channel";
                         try {
                             JSONObject jso = new JSONObject(message);
                             // Publish message with PubNub
                             //pubnub.publish("Everyone", jso , callback);
 
                             // JAMES FROM PUB ORIG FILES
-                            Hashtable args = new Hashtable(2);
+                            //Hashtable args = new Hashtable(2);
 
-                            args.put("channel", "control_channel");
-                            args.put("message", jso);
+                            //args.put("message", jso);
+                            //args.put("message", message);
 
-                            pubnub.publish(args, new Callback() {
+                            pubnub.publish(channel, jso, new Callback() {
                                 @Override
                                 public void successCallback(String channel, Object message) {
                                     notifyUser("PUBLISH : " + message);
