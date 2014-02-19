@@ -172,11 +172,11 @@ public class HomeActivity extends Activity {
                             pubnub.publish("control_channel", jso, new Callback() {
                                 @Override
                                 public void successCallback(String channel, Object message) {
-                                    //int i = Log.i(String.format("PUBLISH : %s", message));
+                                    notifyUser("PUBLISH : " + message);
                                 }
                                 @Override
                                 public void errorCallback(String channel, PubnubError error) {
-                                    //notifyUser("PUBLISH : " + error);
+                                    notifyUser("PUBLISH : " + error);
                                 }
                             });
 
