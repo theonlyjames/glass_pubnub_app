@@ -168,7 +168,8 @@ public class HomeActivity extends Activity {
             {
                 case TAP:
                         // compose JSON message
-                        String message = "{ \"message\" : \"" + "my message" + "\" }";
+                        String message = "{ \"message\" : \"" + message + "\" }";
+                        //final JSONObject obj = (JSONObject) message;
                         String channel = "control_channel";
                         try {
                             JSONObject jso = new JSONObject(message);
@@ -176,7 +177,7 @@ public class HomeActivity extends Activity {
                             //pubnub.publish("Everyone", jso , callback);
 
                             // JAMES FROM PUB ORIG FILES
-                            //Hashtable args = new Hashtable(2);
+                            Hashtable args = new Hashtable(2);
 
                             //args.put("message", jso);
                             //args.put("message", message);
