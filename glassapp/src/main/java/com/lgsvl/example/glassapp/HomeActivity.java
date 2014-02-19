@@ -169,7 +169,12 @@ public class HomeActivity extends Activity {
                             //pubnub.publish("Everyone", jso , callback);
 
                             // JAMES FROM PUB ORIG FILES
-                            pubnub.publish("control_channel", jso, new Callback() {
+                            Hashtable args = new Hashtable(2);
+
+                            args.put("channel", "control_channel");
+                            args.put("message", jso);
+
+                            pubnub.publish(args, new Callback() {
                                 @Override
                                 public void successCallback(String channel, Object message) {
                                     notifyUser("PUBLISH : " + message);
