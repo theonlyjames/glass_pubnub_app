@@ -1,10 +1,15 @@
 package com.lgsvl.example.glassapp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
@@ -12,6 +17,7 @@ import com.pubnub.api.Callback;
 import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubError;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,14 +29,66 @@ public class HomeActivity extends Activity {
 
     Pubnub pubnub = new Pubnub("pub-c-ffcc3163-7fa4-419e-b464-52fcefdd15d9", "sub-c-b2d0c1d8-952b-11e3-8d39-02ee2ddab7fe", "", false);
 
-    public String channel = "control_channel";
+    //public String channel = "control_channel";
 
     private GestureDetector mGestureDetector;
+
+    // ALL FROM PUBANO
+    private void notifyUser(Object message) {
+        try {
+            if (message instanceof JSONObject) {
+                final JSONObject obj = (JSONObject) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_LONG).show();
+
+                        Log.i("Received msg : ", String.valueOf(obj));
+                    }
+                });
+
+            } else if (message instanceof String) {
+                final String obj = (String) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj,
+                                Toast.LENGTH_LONG).show();
+                        Log.i("Received msg : ", obj.toString());
+                    }
+                });
+
+            } else if (message instanceof JSONArray) {
+                final JSONArray obj = (JSONArray) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_LONG).show();
+                        Log.i("Received msg : ", obj.toString());
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        // new from PUBANO
+        setContentView(R.layout.usage);
+        this.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent intent) {
+                pubnub.disconnectAndResubscribe();
+
+            }
+
+        }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        // end
 
         setContentView(R.layout.activity_home);
 
@@ -38,7 +96,7 @@ public class HomeActivity extends Activity {
 
         Hashtable args = new Hashtable(1);
 
-        args.put("control_channel", channel);
+        args.put("channel", "control_channel");
  
         try {
           pubnub.subscribe(args, new Callback() {
