@@ -3,6 +3,7 @@
     package="com.lgsvl.example.glassapp" >
     <application
         android:allowBackup="true"
+        android:keepScreenOn="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
