@@ -1,10 +1,8 @@
 package com.lgsvl.example.glassapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -12,9 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.glass.app.Card;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
 import com.pubnub.api.Callback;
@@ -33,7 +31,7 @@ public class HomeActivity extends Activity {
 
     Pubnub pubnub = new Pubnub("pub-c-ffcc3163-7fa4-419e-b464-52fcefdd15d9", "sub-c-b2d0c1d8-952b-11e3-8d39-02ee2ddab7fe", "", false);
 
-    //public String channel = "control_channel";
+    //  private Card ;
 
     private GestureDetector mGestureDetector;
 
@@ -80,8 +78,14 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
+
+        Card card1;
+        card1 = new Card(this);
+        card1.setText("This card has a footer.");
+        card1.setFootnote("I'm the footer!");
+        // Don't call this if you're using TimelineManager
+        //View card1 View = card1.toView();
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -162,7 +166,79 @@ public class HomeActivity extends Activity {
 
     }
 
-    private void _publish(final String channel) {
+    private GestureDetector createGestureDetector(Context context)
+    {
+        GestureDetector gestureDetector = new GestureDetector(context);
+
+        gestureDetector.setBaseListener(new GestureDetector.BaseListener()
+        {
+            @Override
+            public boolean onGesture(Gesture gesture)
+            {
+            switch (gesture)
+            {
+                case TAP:
+                        // compose JSON message
+                        String message = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
+                        //JSONObject obj = (JSONObject) message;
+                        String channel = "control_channel";
+                        try {
+                            JSONObject jso = new JSONObject(message);
+                            // Publish message with PubNub
+                            //pubnub.publish("Everyone", jso , callback);
+
+                            // JAMES FROM PUB ORIG FILES
+                            Hashtable args = new Hashtable(2);
+
+                            args.put("message", jso);
+                            args.put("message", message);
+
+                            pubnub.publish(channel, jso, new Callback() {
+                                @Override
+                                public void successCallback(String channel, Object message) {
+                                    notifyUser("PUBLISH : " + message);
+                                }
+                                @Override
+                                public void errorCallback(String channel, PubnubError error) {
+                                    notifyUser("PUBLISH : " + error);
+                                }
+                            });
+
+                        } catch (JSONException e) {
+                            Log.e(TAG,  "JSON exception " + e.toString());
+                        }
+
+                    break;
+                case TWO_TAP:
+                default:
+                    break;
+            }
+
+            return true;
+            }
+        });
+
+        return gestureDetector;
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event)
+    {
+        if (mGestureDetector != null)
+        {
+            return mGestureDetector.onMotionEvent(event);
+        }
+
+        return super.onGenericMotionEvent(event);
+    }
+
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//        return mCards.get(position).toView();
+//    }
+
+
+    /*private void _publish(final String channel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Publish");
         builder.setMessage("Enter message");
@@ -235,9 +311,9 @@ public class HomeActivity extends Activity {
         AlertDialog alert = builder.create();
         alert.show();
 
-    }
+    }*/
 
-    private void publish() {
+    /*private void publish() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Publish ");
         builder.setMessage("Enter channel name");
@@ -296,73 +372,6 @@ public class HomeActivity extends Activity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-
-    private GestureDetector createGestureDetector(Context context)
-    {
-        GestureDetector gestureDetector = new GestureDetector(context);
-
-        gestureDetector.setBaseListener(new GestureDetector.BaseListener()
-        {
-            @Override
-            public boolean onGesture(Gesture gesture)
-            {
-            switch (gesture)
-            {
-                case TAP:
-                        // compose JSON message
-                        String message = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
-                        //JSONObject obj = (JSONObject) message;
-                        String channel = "control_channel";
-                        try {
-                            JSONObject jso = new JSONObject(message);
-                            // Publish message with PubNub
-                            //pubnub.publish("Everyone", jso , callback);
-
-                            // JAMES FROM PUB ORIG FILES
-                            Hashtable args = new Hashtable(2);
-
-                            args.put("message", jso);
-                            args.put("message", message);
-
-                            pubnub.publish(channel, jso, new Callback() {
-                                @Override
-                                public void successCallback(String channel, Object message) {
-                                    notifyUser("PUBLISH : " + message);
-                                }
-                                @Override
-                                public void errorCallback(String channel, PubnubError error) {
-                                    notifyUser("PUBLISH : " + error);
-                                }
-                            });
-
-                        } catch (JSONException e) {
-                            Log.e(TAG,  "JSON exception " + e.toString());
-                        }
-
-                    break;
-                case TWO_TAP:
-                default:
-                    break;
-            }
-
-            return true;
-            }
-        });
-
-        return gestureDetector;
-    }
-
-    @Override
-    public boolean onGenericMotionEvent(MotionEvent event)
-    {
-        if (mGestureDetector != null)
-        {
-            return mGestureDetector.onMotionEvent(event);
-        }
-
-        return super.onGenericMotionEvent(event);
-    }
+    }*/
 
 }
