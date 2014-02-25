@@ -54,6 +54,17 @@ public class HomeActivity extends Activity {
         //u = new TextView(this);
 
 
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(HomeActivity.EXTRA_MESSAGE);
+
+        // Create the text view
+        TextView textView = new TextView(this);
+        textView.setTextSize(40);
+        textView.setText(message);
+
+        setContentView(textView);
+
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // new from PUBANO
@@ -225,7 +236,7 @@ public class HomeActivity extends Activity {
                                 }
                             });
 
-                            updateMessage(message.toString());
+                            //updateMessage(message.toString());
 
                             //card1.setText("This card has a footer.");
                             //card1.setFootnote("I'm the footer!");
