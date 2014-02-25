@@ -8,6 +8,8 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.glass.app.Card;
+
 public class DisplayMessageActivity extends Activity {
 
     @Override
@@ -21,14 +23,25 @@ public class DisplayMessageActivity extends Activity {
         }
 
         Intent intent = getIntent();
-        String message = intent.getStringExtra(HomeActivity.EXTRA_MESSAGE);
+        //String message = intent.getStringExtra(HomeActivity.EXTRA_MESSAGE);
+        String message = "JAMES TEST STRING";
 
         // Create the text view
-        TextView textView = new TextView(this);
-        textView.setTextSize(40);
-        textView.setText(message);
+//        TextView textView = new TextView(this);
+//        textView.setTextSize(40);
+//        textView.setText(message);
+//
+//        setContentView(textView);
 
-        setContentView(textView);
+        setContentView(R.layout.activity_display_message);
+        // Create new card view
+        Card cardView = new Card(this);
+        cardView.setText(message);
+        cardView.setFootnote(message);
+        cardView.toView();
+
+        TextView textDisplay = (TextView) findViewById(R.id.textDisplay);
+        textDisplay.setText(message);
     }
 
     @Override
