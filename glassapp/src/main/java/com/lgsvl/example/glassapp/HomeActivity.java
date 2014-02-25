@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.glass.app.Card;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
 import com.pubnub.api.Callback;
@@ -20,7 +16,6 @@ import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubError;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Hashtable;
@@ -39,13 +34,10 @@ public class HomeActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
 
-        //View myView = (usage) findViewById(R.layout.usage);
-        setContentView(R.layout.activity_home);
-
-        Card card1;
-        card1 = new Card(this);
-        card1.setText("This card has a footer.");
-        card1.setFootnote("I'm the footer!");
+//        Card card1;
+//        card1 = new Card(this);
+//        card1.setText("This card has a footer.");
+//        card1.setFootnote("I'm the footer!");
         // Don't call this if you're using TimelineManager
         //View card1 View = card1.toView();
         //card1.toView();
@@ -54,15 +46,15 @@ public class HomeActivity extends Activity {
         //u = new TextView(this);
 
 
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(HomeActivity.EXTRA_MESSAGE);
+        //Intent intent = getIntent();
+        //String message = intent.getStringExtra(HomeActivity.EXTRA_MESSAGE);
 
         // Create the text view
-        TextView textView = new TextView(this);
-        textView.setTextSize(40);
-        textView.setText(message);
+        //TextView textView = new TextView(this);
+        //textView.setTextSize(40);
+        //textView.setText(message);
 
-        setContentView(textView);
+        //setContentView(textView);
 
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -146,10 +138,11 @@ public class HomeActivity extends Activity {
 
     }
 
-    public void sendMessage(View view) {
+    public void sendMessage(String messageNew) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.layout.activity_home);
-        String message = editText.getText().toString();
+        //EditText editText = (EditText) findViewById(R.layout.activity_home);
+        //String message = editText.getText().toString();
+        String message = messageNew.toString();
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
@@ -211,10 +204,15 @@ public class HomeActivity extends Activity {
                         //card1 = new Card();
 
                         // compose JSON message
-                        String message = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
+                        String messageNew = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
                         //JSONObject obj = (JSONObject) message;
-                        String channel = "control_channel";
-                        try {
+                        //String channel = "control_channel";
+                        sendMessage(messageNew);
+                        //TextView text = (TextView) findViewById(R.layout.fragment_home);
+
+                        //text.setText(message);
+
+                        /*try {
                             JSONObject jso = new JSONObject(message);
                             // Publish message with PubNub
                             //pubnub.publish("Everyone", jso , callback);
@@ -245,7 +243,7 @@ public class HomeActivity extends Activity {
 
                         } catch (JSONException e) {
                             Log.e(TAG,  "JSON exception " + e.toString());
-                        }
+                        }*/
 
                     break;
                 case TWO_TAP:

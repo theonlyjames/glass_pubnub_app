@@ -5,5 +5,5 @@
     android:layout_height="match_parent"
     tools:context="com.lgsvl.example.glassapp.HomeActivity"
     tools:ignore="MergeRootFrame"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 </FrameLayout>
