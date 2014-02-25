@@ -6,11 +6,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.ScrollView;
 
 import com.google.android.glass.app.Card;
 
+import java.util.List;
+
 public class DisplayMessageActivity extends Activity {
+
+    private List<Card> mCards;
+    private ScrollView mCardScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,25 +28,17 @@ public class DisplayMessageActivity extends Activity {
         }
 
         Intent intent = getIntent();
-        //String message = intent.getStringExtra(HomeActivity.EXTRA_MESSAGE);
-        String message = "JAMES TEST STRING";
+        String message = intent.getStringExtra(HomeActivity.EXTRA_MESSAGE);
 
-        // Create the text view
-//        TextView textView = new TextView(this);
-//        textView.setTextSize(40);
-//        textView.setText(message);
+//        setContentView(R.layout.activity_display_message);
+//        // Create new card view
+//        Card cardView = new Card(this);
+//        cardView.setText(message);
+//        cardView.setFootnote(message);
+//        cardView.toView();
 //
-//        setContentView(textView);
-
-        setContentView(R.layout.activity_display_message);
-        // Create new card view
-        Card cardView = new Card(this);
-        cardView.setText(message);
-        cardView.setFootnote(message);
-        cardView.toView();
-
-        TextView textDisplay = (TextView) findViewById(R.id.textDisplay);
-        textDisplay.setText(message);
+//        TextView textDisplay = (TextView) findViewById(R.id.textDisplay);
+//        textDisplay.setText(message);
     }
 
     @Override
