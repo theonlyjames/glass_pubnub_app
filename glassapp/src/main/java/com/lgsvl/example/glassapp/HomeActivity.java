@@ -1,15 +1,15 @@
 package com.lgsvl.example.glassapp;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.glass.app.Card;
@@ -28,57 +28,19 @@ import java.util.Hashtable;
 
 public class HomeActivity extends Activity {
     public static String TAG = "VL-VoiceLayerGlass";
+    public final static String EXTRA_MESSAGE = "com.lgsvl.example.MESSAGE";
 
     Pubnub pubnub = new Pubnub("pub-c-ffcc3163-7fa4-419e-b464-52fcefdd15d9", "sub-c-b2d0c1d8-952b-11e3-8d39-02ee2ddab7fe", "", false);
 
-    //  private Card ;
-
     private GestureDetector mGestureDetector;
-
-    // ALL FROM PUBANO
-    private void notifyUser(Object message) {
-        try {
-            if (message instanceof JSONObject) {
-                final JSONObject obj = (JSONObject) message;
-                this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_SHORT).show();
-
-                        Log.i("Received msg : ", String.valueOf(obj));
-                    }
-                });
-
-            } else if (message instanceof String) {
-                final String obj = (String) message;
-                this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_SHORT).show();
-                        Log.i("Received msg : ", obj.toString());
-                    }
-                });
-
-            } else if (message instanceof JSONArray) {
-                final JSONArray obj = (JSONArray) message;
-                this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_SHORT).show();
-                        Log.i("Received msg : ", obj.toString());
-                    }
-                });
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        //View myView = (usage) findViewById(R.layout.usage);
+        setContentView(R.layout.activity_home);
 
         Card card1;
         card1 = new Card(this);
@@ -86,22 +48,29 @@ public class HomeActivity extends Activity {
         card1.setFootnote("I'm the footer!");
         // Don't call this if you're using TimelineManager
         //View card1 View = card1.toView();
+        //card1.toView();
+
+        // new usage view
+        //u = new TextView(this);
+
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // new from PUBANO
-        setContentView(R.layout.usage);
+        /*setContentView(R.layout.usage);
+
         this.registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context arg0, Intent intent) {
                 pubnub.disconnectAndResubscribe();
-
             }
 
         }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        // end
+        // end*/
 
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.fragment_home);
+
+        //findViewById(R.layout.fragment_home);
 
         mGestureDetector = createGestureDetector(this);
 
@@ -166,6 +135,54 @@ public class HomeActivity extends Activity {
 
     }
 
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        EditText editText = (EditText) findViewById(R.layout.activity_home);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+
+    // ALL FROM PUBANO
+    private void notifyUser(Object message) {
+        try {
+            if (message instanceof JSONObject) {
+                final JSONObject obj = (JSONObject) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                        Log.i("Received msg : ", String.valueOf(obj));
+                    }
+                });
+
+            } else if (message instanceof String) {
+                final String obj = (String) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_SHORT).show();
+                        Log.i("Received msg : ", obj.toString());
+                    }
+                });
+
+            } else if (message instanceof JSONArray) {
+                final JSONArray obj = (JSONArray) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_SHORT).show();
+                        Log.i("Received msg : ", obj.toString());
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private GestureDetector createGestureDetector(Context context)
     {
         GestureDetector gestureDetector = new GestureDetector(context);
@@ -178,6 +195,10 @@ public class HomeActivity extends Activity {
             switch (gesture)
             {
                 case TAP:
+                        //Usage usage = (Usage).findViewById(R.layout.usage);
+                        //Card card1;
+                        //card1 = new Card();
+
                         // compose JSON message
                         String message = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
                         //JSONObject obj = (JSONObject) message;
@@ -191,7 +212,7 @@ public class HomeActivity extends Activity {
                             Hashtable args = new Hashtable(2);
 
                             args.put("message", jso);
-                            args.put("message", message);
+                            args.put("message2", message);
 
                             pubnub.publish(channel, jso, new Callback() {
                                 @Override
@@ -203,6 +224,13 @@ public class HomeActivity extends Activity {
                                     notifyUser("PUBLISH : " + error);
                                 }
                             });
+
+                            updateMessage(message.toString());
+
+                            //card1.setText("This card has a footer.");
+                            //card1.setFootnote("I'm the footer!");
+                            //setContentView(card1);
+                            //card1.toView();
 
                         } catch (JSONException e) {
                             Log.e(TAG,  "JSON exception " + e.toString());
