@@ -11,9 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
-import com.pubnub.api.Callback;
 import com.pubnub.api.Pubnub;
-import com.pubnub.api.PubnubError;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,9 +36,10 @@ public class HomeActivity extends Activity {
 //        card1 = new Card(this);
 //        card1.setText("This card has a footer.");
 //        card1.setFootnote("I'm the footer!");
-        // Don't call this if you're using TimelineManager
-        //View card1 View = card1.toView();
-        //card1.toView();
+//
+//        // Don't call this if you're using TimelineManager
+//        //View card1 View = card1.toView();
+//        card1.toView();
 
         // new usage view
         //u = new TextView(this);
@@ -81,7 +80,7 @@ public class HomeActivity extends Activity {
 
         args.put("channel", "control_channel");
  
-        try {
+        /*try {
           pubnub.subscribe(args, new Callback() {
 
               @Override
@@ -134,7 +133,7 @@ public class HomeActivity extends Activity {
           );
         } catch (Exception e) {
           Log.d("PUBNUB",e.toString());
-        }   
+        }*/
 
     }
 
