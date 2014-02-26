@@ -11,5 +11,6 @@
     <string name="title_activity_display_message">MyMessage</string>
     <string name="text_view">Text View</string>
     <string name="share_image">Share Image</string>
+    <string name="logString">CLICK ON SCROLL CARD</string>
 
 </resources>

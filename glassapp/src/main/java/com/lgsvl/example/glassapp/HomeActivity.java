@@ -121,6 +121,15 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
+    public void sendDeviceList() {
+        Intent displayDeviceList = new Intent(this, DisplayMessageActivity.class);
+        //EditText editText = (EditText) findViewById(R.layout.activity_home);
+        //String message = editText.getText().toString();
+        //String message = messageNew.toString();
+        //displayDeviceList.putExtra(EXTRA_MESSAGE, message);
+        startActivity(displayDeviceList);
+    }
+
     // ALL FROM PUBANO
     private void notifyUser(Object message) {
         try {
@@ -173,9 +182,11 @@ public class HomeActivity extends Activity {
             switch (gesture)
             {
                 case TAP:
+                    sendDeviceList();
                         //Usage usage = (Usage).findViewById(R.layout.usage);
                         //Card card1;
                         //card1 = new Card();
+                    //_pickerDialog.show();
 
                         // compose JSON message
                         //String messageNew = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";

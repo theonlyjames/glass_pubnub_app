@@ -2,16 +2,18 @@ package com.lgsvl.example.glassapp;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.connectsdk.core.LaunchSession;
@@ -23,8 +25,9 @@ import com.connectsdk.service.DeviceService;
 import com.connectsdk.service.capability.listeners.LaunchListener;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.google.android.glass.app.Card;
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.widget.CardScrollAdapter;
-import com.google.android.glass.widget.CardScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,7 @@ import java.util.List;
 public class DisplayMessageActivity extends Activity {
 
     private List<Card> mCards;
-    private CardScrollView mCardScrollView;
+    private TuggableView mCardScrollView;
 
     // DISCOVER DEVICE
     DiscoveryManager _discoveryManager;
@@ -40,10 +43,11 @@ public class DisplayMessageActivity extends Activity {
     ConnectableDevice _device;
     TextView _statusTextView;
 
+    private GestureDetector mGestureDetectorScroll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         // Make sure we're running on Honeycomb or higher to use ActionBar APIs
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -62,7 +66,7 @@ public class DisplayMessageActivity extends Activity {
         //setContentView(new TuggableView(this, R.layout.activity_home));
         //setContentView(mCardScrollView);
 
-        mCardScrollView = new CardScrollView(this);
+        mCardScrollView = new TuggableView(this, R.layout.activity_display_message);
         CatagoryCardScrollAdapter adapter = new CatagoryCardScrollAdapter();
         mCardScrollView.setAdapter(adapter);
         mCardScrollView.activate();
@@ -70,27 +74,72 @@ public class DisplayMessageActivity extends Activity {
 
         DiscoveryManager.getInstance(getApplicationContext()).start();
 
+        mGestureDetectorScroll = createGestureDetector(this);
+
+//        Intent displayDeviceList = getIntent();
+//        String deviceMessage = displayDeviceList.toString();
+
+
+//        _statusTextView = (TextView) this.findViewById(R.id.statusTextView);
+//        Button shareImageButton = (Button) this.findViewById(R.id.shareImageButton);
+//
+//        shareImageButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                //_pickerDialog.show();
+//            }
+//        });
+
         setupPicker();
-
-        _statusTextView = (TextView) this.findViewById(R.id.statusTextView);
-        Button shareImageButton = (Button) this.findViewById(R.id.shareImageButton);
-
-        shareImageButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                _pickerDialog.show();
-            }
-        });
 
 //        TextView textDisplay = (TextView) findViewById(R.id.textDisplay);
 //        textDisplay.setText(message);
+    }
+
+    private GestureDetector createGestureDetector(Context context)
+    {
+        GestureDetector gestureDetectorScroll = new GestureDetector(context);
+
+        gestureDetectorScroll.setBaseListener(new GestureDetector.BaseListener()
+        {
+            @Override
+            public boolean onGesture(Gesture gesture)
+            {
+                switch (gesture)
+                {
+                    case TAP:
+                        _pickerDialog.show();
+                        Log.v("CLICK ON CARD", "CLICK ON CARD");
+                        break;
+                    case TWO_TAP:
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+        return gestureDetectorScroll;
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event)
+    {
+        if (mGestureDetectorScroll != null)
+        {
+            return mGestureDetectorScroll.onMotionEvent(event);
+        }
+
+        return super.onGenericMotionEvent(event);
     }
 
     private void createCards(String message) {
         mCards = new ArrayList<Card>();
 
         Card card;
+
         // Create new card view
         card = new Card(this);
         card.setText("YOU ARE SO AWESOME");
