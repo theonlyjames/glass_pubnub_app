@@ -59,7 +59,7 @@ public class DisplayMessageActivity extends Activity {
         Card card;
         // Create new card view
         card = new Card(this);
-        card.setText();
+        card.setText("YOU ARE SO AWESOME");
         card.setFootnote(message);
         //card.toView();
         mCards.add(card);
