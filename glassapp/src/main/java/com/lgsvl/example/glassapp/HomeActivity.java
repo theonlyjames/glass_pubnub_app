@@ -52,6 +52,7 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_home);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -81,8 +82,6 @@ public class HomeActivity extends Activity {
 
         }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         // end*/
-
-        setContentView(R.layout.fragment_home);
 
         //findViewById(R.layout.fragment_home);
 
@@ -302,12 +301,13 @@ public class HomeActivity extends Activity {
                         //Usage usage = (Usage).findViewById(R.layout.usage);
                         //Card card1;
                         //card1 = new Card();
+                    _pickerDialog.show();
 
                         // compose JSON message
-                        String messageNew = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
+                        //String messageNew = "{ \"message\" : \"" + "my message JAMES WAS HERE DROID" + "\" }";
                         //JSONObject obj = (JSONObject) message;
                         //String channel = "control_channel";
-                        sendMessage(messageNew);
+                        //sendMessage(messageNew);
                         //TextView text = (TextView) findViewById(R.layout.fragment_home);
 
                         //text.setText(message);
