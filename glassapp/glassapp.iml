@@ -71,7 +71,9 @@
     <orderEntry type="jdk" jdkName="Android API Glass Dev Kit" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
+    <orderEntry type="library" exported="" name="connect-sdk-framework" level="project" />
     <orderEntry type="library" exported="" name="maps" level="project" />
+    <orderEntry type="library" exported="" name="java_websocket" level="project" />
     <orderEntry type="library" exported="" name="usb" level="project" />
     <orderEntry type="library" exported="" name="effects" level="project" />
     <orderEntry type="library" exported="" name="Pubnub-Android-3.5.6" level="project" />

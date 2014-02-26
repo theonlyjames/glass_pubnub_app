@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="connect-sdk-framework">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/glassapp/libs/connect-sdk-framework.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
