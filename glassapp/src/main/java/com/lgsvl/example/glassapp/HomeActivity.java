@@ -37,46 +37,6 @@ public class HomeActivity extends Activity {
 
     private GestureDetector mGestureDetector;
 
-    // ALL FROM PUBANO
-    private void notifyUser(Object message) {
-        try {
-            if (message instanceof JSONObject) {
-                final JSONObject obj = (JSONObject) message;
-                this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_SHORT).show();
-
-                        Log.i("Received msg : ", String.valueOf(obj));
-                    }
-                });
-
-            } else if (message instanceof String) {
-                final String obj = (String) message;
-                this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_SHORT).show();
-                        Log.i("Received msg : ", obj.toString());
-                    }
-                });
-
-            } else if (message instanceof JSONArray) {
-                final JSONArray obj = (JSONArray) message;
-                this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), obj.toString(),
-                                Toast.LENGTH_SHORT).show();
-                        Log.i("Received msg : ", obj.toString());
-                    }
-                });
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -137,7 +97,7 @@ public class HomeActivity extends Activity {
                       if (message instanceof JSONObject) {
                           JSONObject jso = (JSONObject)message;
                               //final String message = jso.getString("message");
-                              notifyUser("PUBLISH : " + jso);
+                              notifyUser("PUBLISH : " + jso.get("message").toString());
                               Log.e(TAG, "Got message " + message);
 
                       }
@@ -160,6 +120,46 @@ public class HomeActivity extends Activity {
           Log.d("PUBNUB",e.toString());
         }   
 
+    }
+
+    // ALL FROM PUBANO
+    private void notifyUser(Object message) {
+        try {
+            if (message instanceof JSONObject) {
+                final JSONObject obj = (JSONObject) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                        Log.i("Received msg : ", String.valueOf(obj));
+                    }
+                });
+
+            } else if (message instanceof String) {
+                final String obj = (String) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_SHORT).show();
+                        Log.i("Received msg : ", obj.toString());
+                    }
+                });
+
+            } else if (message instanceof JSONArray) {
+                final JSONArray obj = (JSONArray) message;
+                this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), obj.toString(),
+                                Toast.LENGTH_SHORT).show();
+                        Log.i("Received msg : ", obj.toString());
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void _publish(final String channel) {
